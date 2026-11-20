@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Smart Campus Complaint Desk</title>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f2f5f7;--surf:#fff;--ink:#12263a;--mute:#566878;--line:#d5dde4;--acc:#0e6e78;--on:#fff;--p:#8a4f00;--pb:#ffefcf;--i:#1d4ed8;--ib:#dfe8ff;--r:#136c3a;--rb:#d8f2e1;--e:#b42318;--eb:#fde8e6;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1a24;--surf:#16263340;--ink:#e6eef5;--mute:#9db0c0;--line:#2b3f50;--acc:#4cc2cc;--on:#06242a;--p:#ffc46b;--pb:#3a2a0c;--i:#9db9ff;--ib:#1b2a52;--r:#7fdc9f;--rb:#0f3320;--e:#ff9a90;--eb:#431712}}
+:root[data-theme="dark"]{--bg:#0e1a24;--surf:#162633;--ink:#e6eef5;--mute:#9db0c0;--line:#2b3f50;--acc:#4cc2cc;--on:#06242a;--p:#ffc46b;--pb:#3a2a0c;--i:#9db9ff;--ib:#1b2a52;--r:#7fdc9f;--rb:#0f3320;--e:#ff9a90;--eb:#431712}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--surf:#162633}}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 "Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+header{background:var(--acc);color:var(--on);padding:18px 16px 0}
+.wrap{max-width:1100px;margin:0 auto}
+h1{font-size:1.5rem;margin:0 0 2px;line-height:1.2}
+header p{margin:0 0 14px;opacity:.9}
+nav{display:flex;gap:6px}
+nav button{font:inherit;font-weight:700;border:0;padding:10px 18px;border-radius:10px 10px 0 0;background:transparent;color:inherit;cursor:pointer;opacity:.85}
+nav button[aria-selected="true"]{background:var(--bg);color:var(--ink);opacity:1}
+main{padding:20px 16px 90px}
+.card{background:var(--surf);border:1px solid var(--line);border-radius:12px;padding:18px}
+.card h2{font-size:1.15rem;margin:0 0 4px}
+.sub{color:var(--mute);margin:0 0 14px;font-size:.95rem}
+.grid{display:grid;gap:18px;grid-template-columns:minmax(0,1fr);align-items:start}
+@media (min-width:860px){.grid{grid-template-columns:minmax(0,1.1fr) minmax(0,1fr)}}
+.stack{display:grid;gap:18px}
+label{display:block;font-weight:700;margin:12px 0 4px}
+input,select,textarea{width:100%;font:inherit;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:8px;padding:10px 12px}
+textarea{min-height:110px;resize:vertical}
+input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+[aria-invalid="true"]{border-color:var(--e)}
+.ferr{color:var(--e);font-size:.9rem;margin:4px 0 0;min-height:0}
+.btn{font:inherit;font-weight:700;background:var(--acc);color:var(--on);border:0;border-radius:8px;padding:11px 18px;cursor:pointer}
+.btn.alt{background:transparent;color:var(--ink);border:1.5px solid var(--line)}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:end;margin-top:14px}
+.row>*{flex:1 1 150px}.row .btn{flex:0 0 auto}
+.msg{margin-top:14px;padding:12px 14px;border-radius:8px;font-size:.97rem}
+.msg.ok{background:var(--rb);color:var(--r)}.msg.bad{background:var(--eb);color:var(--e)}
+.msg strong{font-size:1.15rem;letter-spacing:.02em}
+.badge{display:inline-block;padding:2px 10px;border-radius:99px;font-size:.85rem;font-weight:700;white-space:nowrap}
+.s-Pending{background:var(--pb);color:var(--p)}.s-In-Progress{background:var(--ib);color:var(--i)}.s-Resolved{background:var(--rb);color:var(--r)}
+.scroll{overflow-x:auto;border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;min-width:680px}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top;font-size:.95rem}
+th{background:var(--bg);font-weight:700;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+td.id{font-weight:700;white-space:nowrap}
+td select{padding:6px 8px;min-width:130px}
+.stats{display:grid;gap:12px;grid-template-columns:repeat(2,minmax(0,1fr));margin-bottom:18px}
+@media (min-width:700px){.stats{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.stat{background:var(--surf);border:1px solid var(--line);border-left:6px solid var(--acc);border-radius:10px;padding:12px 14px}
+.stat b{display:block;font-size:1.9rem;line-height:1.1}.stat span{color:var(--mute)}
+.stat.p{border-left-color:var(--p)}.stat.i{border-left-color:var(--i)}.stat.r{border-left-color:var(--r)}
+.steps{display:flex;gap:6px;margin:12px 0 4px}
+.steps div{flex:1;text-align:center;padding:6px 4px;border-radius:8px;background:var(--bg);color:var(--mute);font-size:.88rem;border:1.5px solid var(--line)}
+.steps .on{background:var(--acc);color:var(--on);border-color:var(--acc);font-weight:700}
+dl{display:grid;grid-template-columns:110px 1fr;gap:4px 10px;margin:10px 0 0}dt{color:var(--mute)}dd{margin:0}
+.empty{padding:22px;text-align:center;color:var(--mute)}
+#toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(18px + env(safe-area-inset-bottom,0px));max-width:calc(100% - 32px);padding:11px 18px;border-radius:10px;background:var(--ink);color:var(--bg);font-weight:700;opacity:0;pointer-events:none;transition:opacity .2s}
+#toast.show{opacity:1}#toast.err{background:var(--e);color:#fff}
+[hidden]{display:none!important}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style></head>
+<body>
+<header><div class="wrap">
+<h1>Smart Campus Complaint Desk</h1>
+<p>Report a problem, get a complaint ID, and follow it until it is fixed.</p>
+<nav role="tablist" aria-label="Portal">
+<button role="tab" id="t-student" aria-selected="true">Student portal</button>
+<button role="tab" id="t-admin" aria-selected="false">Admin dashboard</button>
+</nav></div></header>
+<main><div class="wrap">
+
+<section id="v-student" class="stack">
+<div class="grid">
+<div class="card">
+<h2>Submit a complaint</h2><p class="sub">All fields are required.</p>
+<form id="f" novalidate>
+<label for="name">Student name</label><input id="name" autocomplete="name" maxlength="60"><p class="ferr" id="e-name"></p>
+<label for="dept">Department</label><select id="dept"></select><p class="ferr" id="e-dept"></p>
+<label for="cat">Category</label><select id="cat"></select><p class="ferr" id="e-cat"></p>
+<label for="desc">Description</label><textarea id="desc" maxlength="500" placeholder="What is wrong, and where? For example: Projector in Room B-204 shows no signal."></textarea>
+<p class="ferr" id="e-desc"></p>
+<div class="row"><button class="btn" type="submit">Submit complaint</button></div>
+</form>
+<div id="submitMsg" role="status" hidden></div>
+</div>
+<div class="card">
+<h2>Track a complaint</h2><p class="sub">Enter your complaint ID, for example CMP-2026-0001.</p>
+<form id="tf" novalidate>
+<label for="tid">Complaint ID</label><input id="tid" autocomplete="off" maxlength="14" placeholder="CMP-2026-0001"><p class="ferr" id="e-tid"></p>
+<div class="row"><button class="btn" type="submit">Search</button></div>
+</form>
+<div id="track" role="status"></div>
+</div>
+</div>
+<div class="card"><h2>Submitted complaints</h2><p class="sub">Newest first. Names are kept private; use your ID to see full details.</p>
+<div id="pub"></div></div>
+</section>
+
+<section id="v-admin" class="stack" hidden>
+<div class="stats" id="stats"></div>
+<div class="card"><h2>All complaints</h2>
+<div class="row" style="margin-top:6px">
+<div><label for="fc">Category</label><select id="fc"></select></div>
+<div><label for="fs">Status</label><select id="fs"></select></div>
+<button class="btn alt" id="clr" type="button">Clear filters</button>
+<button class="btn alt" id="rst" type="button">Reset sample data</button>
+</div>
+<p class="sub" id="count" style="margin-top:12px"></p>
+<div id="adm"></div></div>
+</section>
+</div></main>
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script>
+const KEY="campus-complaints-v1";
+const CATS=["Classroom projector","Wi-Fi","Drinking water","Laboratory equipment","Washrooms","Hostel maintenance"];
+const DEPTS=["Computer Science","Information Technology","Electronics and Communication","Mechanical","Civil","Electrical","MBA","Science and Humanities"];
+const STAT=["Pending","In Progress","Resolved"];
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fmt=d=>new Date(d).toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"});
+const cls=s=>"s-"+s.replace(" ","-");
+const badge=s=>`<span class="badge ${cls(s)}">${s}</span>`;
+
+function seed(){
+ const d=(n,c,dp,cat,t,st,day)=>({id:`CMP-2026-${String(n).padStart(4,"0")}`,name:c,dept:dp,cat,desc:t,status:st,date:`2026-11-${day}T10:00:00`});
+ return [
+  d(1,"Aarthi K","Computer Science","Classroom projector","Projector in Room B-204 shows no signal during morning lectures.","Pending","18"),
+  d(2,"Rahul M","Information Technology","Wi-Fi","Wi-Fi in the library reading hall disconnects every few minutes.","In Progress","17"),
+  d(3,"Divya S","Electronics and Communication","Drinking water","Water purifier on the second floor of the ECE block is not working.","Resolved","14"),
+  d(4,"Karthik R","Mechanical","Laboratory equipment","Two lathe machines in the workshop need servicing; one makes a loud noise.","In Progress","16"),
+  d(5,"Meena P","Civil","Washrooms","Ground floor washroom near the seminar hall has no running water.","Pending","19"),
+  d(6,"Suresh V","Electrical","Hostel maintenance","Ceiling fan in Hostel Block C, Room 112 has stopped working.","Resolved","12"),
+  d(7,"Nisha T","MBA","Wi-Fi","No Wi-Fi signal in the MBA seminar room on the third floor.","Pending","20")];
+}
+let data;
+try{const v=localStorage.getItem(KEY);data=v?JSON.parse(v):null}catch(e){data=null}
+if(!Array.isArray(data)){data=seed();save()}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(data))}catch(e){toast("Browser storage is unavailable, so changes will be lost when you close this page.",1)}}
+let tt;function toast(m,bad){const t=$("#toast");t.textContent=m;t.className="show"+(bad?" err":"");clearTimeout(tt);tt=setTimeout(()=>t.className="",3600)}
+
+function fill(sel,items,first){sel.innerHTML=(first?`<option value="">${first}</option>`:"")+items.map(i=>`<option>${esc(i)}</option>`).join("")}
+fill($("#dept"),DEPTS,"Select your department");fill($("#cat"),CATS,"Select a category");
+fill($("#fc"),CATS,"All categories");fill($("#fs"),STAT,"All statuses");
+
+function nextId(){const n=data.reduce((m,c)=>Math.max(m,parseInt(c.id.slice(-4),10)||0),0)+1;return `CMP-${new Date().getFullYear()}-${String(n).padStart(4,"0")}`}
+function setErr(k,m){$("#e-"+k).textContent=m||"";const f=$("#"+k);if(f)f.setAttribute("aria-invalid",m?"true":"false")}
+
+$("#f").addEventListener("submit",e=>{
+ e.preventDefault();
+ const name=$("#name").value.trim(),dept=$("#dept").value,cat=$("#cat").value,desc=$("#desc").value.trim();
+ const er={name:!name?"Enter your name.":!/^[A-Za-z][A-Za-z .'-]{2,59}$/.test(name)?"Use letters only, at least 3 characters.":"",
+  dept:dept?"":"Select your department.",cat:cat?"":"Select a category.",
+  desc:!desc?"Describe the problem.":desc.length<15?`Add more detail (${desc.length}/15 characters minimum).`:""};
+ Object.keys(er).forEach(k=>setErr(k,er[k]));
+ const m=$("#submitMsg");
+ if(Object.values(er).some(Boolean)){m.hidden=false;m.className="msg bad";m.textContent="Complaint not submitted. Fix the highlighted fields and try again.";toast("Please fix the errors in the form.",1);return}
+ const c={id:nextId(),name,dept,cat,desc,status:"Pending",date:new Date().toISOString()};
+ data.unshift(c);save();
+ m.hidden=false;m.className="msg ok";
+ m.innerHTML=`Complaint submitted. Your ID is <strong>${c.id}</strong>. Save it to track progress.`;
+ $("#f").reset();$("#tid").value=c.id;toast("Complaint submitted: "+c.id);renderAll();
+});
+
+function table(list,admin){
+ if(!list.length)return `<div class="empty">No complaints match. Try clearing the filters.</div>`;
+ const rows=list.map(c=>`<tr><td class="id">${c.id}</td>${admin?`<td>${esc(c.name)}</td>`:""}<td>${esc(c.dept)}</td><td>${esc(c.cat)}</td>
+ ${admin?`<td>${esc(c.desc)}</td>`:""}<td>${fmt(c.date)}</td><td>${admin?`<select data-id="${c.id}" aria-label="Status for ${c.id}">${STAT.map(s=>`<option${s===c.status?" selected":""}>${s}</option>`).join("")}</select>`:badge(c.status)}</td></tr>`).join("");
+ return `<div class="scroll"><table><thead><tr><th>ID</th>${admin?"<th>Student</th>":""}<th>Department</th><th>Category</th>${admin?"<th>Description</th>":""}<th>Date</th><th>Status</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+}
+const sorted=()=>[...data].sort((a,b)=>b.date.localeCompare(a.date)||b.id.localeCompare(a.id));
+function renderPub(){$("#pub").innerHTML=table(sorted(),false)}
+function renderAdmin(){
+ const n=s=>data.filter(c=>c.status===s).length;
+ $("#stats").innerHTML=`<div class="stat"><b>${data.length}</b><span>Total complaints</span></div><div class="stat p"><b>${n("Pending")}</b><span>Pending</span></div><div class="stat i"><b>${n("In Progress")}</b><span>In progress</span></div><div class="stat r"><b>${n("Resolved")}</b><span>Resolved</span></div>`;
+ const fc=$("#fc").value,fs=$("#fs").value;
+ const list=sorted().filter(c=>(!fc||c.cat===fc)&&(!fs||c.status===fs));
+ $("#count").textContent=`Showing ${list.length} of ${data.length} complaints.`;
+ $("#adm").innerHTML=table(list,true);
+}
+function renderAll(){renderPub();renderAdmin()}
+
+$("#adm").addEventListener("change",e=>{
+ const s=e.target.closest("select[data-id]");if(!s)return;
+ const c=data.find(x=>x.id===s.dataset.id);if(!c)return;
+ c.status=s.value;save();toast(`${c.id} is now ${c.status}.`);renderAll();
+});
+["#fc","#fs"].forEach(i=>$(i).addEventListener("change",renderAdmin));
+$("#clr").onclick=()=>{$("#fc").value="";$("#fs").value="";renderAdmin();toast("Filters cleared.")};
+$("#rst").onclick=()=>{if(confirm("Replace all complaints with the sample records?")){data=seed();save();renderAll();toast("Sample data restored.")}};
+
+$("#tf").addEventListener("submit",e=>{
+ e.preventDefault();
+ const v=$("#tid").value.trim().toUpperCase(),box=$("#track");
+ if(!v){setErr("tid","Enter a complaint ID.");box.innerHTML="";return}
+ if(!/^CMP-\d{4}-\d{4}$/.test(v)){setErr("tid","Use the format CMP-2026-0001.");box.innerHTML="";return}
+ setErr("tid","");
+ const c=data.find(x=>x.id===v);
+ if(!c){box.innerHTML=`<div class="msg bad">No complaint found with ID ${esc(v)}. Check the ID and try again.</div>`;toast("Complaint not found.",1);return}
+ const at=STAT.indexOf(c.status);
+ box.innerHTML=`<div class="steps">${STAT.map((s,i)=>`<div class="${i<=at?"on":""}">${s}</div>`).join("")}</div>
+ <dl><dt>Complaint ID</dt><dd><b>${c.id}</b></dd><dt>Status</dt><dd>${badge(c.status)}</dd><dt>Student</dt><dd>${esc(c.name)}</dd><dt>Department</dt><dd>${esc(c.dept)}</dd><dt>Category</dt><dd>${esc(c.cat)}</dd><dt>Submitted</dt><dd>${fmt(c.date)}</dd><dt>Details</dt><dd>${esc(c.desc)}</dd></dl>`;
+ toast("Complaint found.");
+});
+
+function show(v){
+ const a=v==="admin";
+ $("#v-student").hidden=a;$("#v-admin").hidden=!a;
+ $("#t-student").setAttribute("aria-selected",!a);$("#t-admin").setAttribute("aria-selected",a);
+ if(a)renderAdmin();
+}
+$("#t-student").onclick=()=>{location.hash="student"};
+$("#t-admin").onclick=()=>{location.hash="admin"};
+addEventListener("hashchange",()=>show(location.hash==="#admin"?"admin":"student"));
+show(location.hash==="#admin"?"admin":"student");
+renderAll();
+</script>
+</body></html>
